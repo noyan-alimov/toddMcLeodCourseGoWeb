@@ -13,6 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	defer l.Close()
 
 	for {
@@ -23,19 +24,17 @@ func main() {
 		}
 
 		scanner := bufio.NewScanner(conn)
+
 		for scanner.Scan() {
 			ln := scanner.Text()
 			fmt.Println(ln)
 			if ln == "" {
-				// when ln is empty, header is done
-				fmt.Println("THIS IS THE END OF THE HTTP REQUEST HEADERS")
 				break
 			}
 		}
 
-		defer conn.Close()
 		fmt.Println("Code got here.")
-		io.WriteString(conn, "I see you connected.")
-
+		io.WriteString(conn, "I see you connected\n")
+		conn.Close()
 	}
 }
